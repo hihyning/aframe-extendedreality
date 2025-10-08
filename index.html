@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A-Frame Extended Reality</title>
+    <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a-scene 
+        vr-mode-ui="enabled: true" 
+        embedded 
+        style="height: 100vh; width: 100vw;">
+        
+        <!-- Assets -->
+        <a-assets>
+            <!-- You can add your 3D models, textures, and audio files here -->
+        </a-assets>
+
+        <!-- Camera -->
+        <a-camera 
+            id="camera" 
+            position="0 1.6 0" 
+            look-controls-enabled="true"
+            wasd-controls-enabled="true">
+        </a-camera>
+
+        <!-- Lighting -->
+        <a-light type="ambient" color="#404040"></a-light>
+        <a-light type="directional" position="2 4 2" color="#ffffff" intensity="0.5"></a-light>
+
+        <!-- Ground -->
+        <a-plane 
+            position="0 0 0" 
+            rotation="-90 0 0" 
+            width="100" 
+            height="100" 
+            color="#7BC8A4">
+        </a-plane>
+
+        <!-- Example objects -->
+        <a-box 
+            position="-1 0.5 -3" 
+            rotation="0 45 0" 
+            color="#4CC3D9">
+        </a-box>
+
+        <a-sphere 
+            position="0 1.25 -5" 
+            radius="1.25" 
+            color="#EF2D5E">
+        </a-sphere>
+
+        <a-cylinder 
+            position="1 0.75 -3" 
+            radius="0.5" 
+            height="1.5" 
+            color="#FFC65D">
+        </a-cylinder>
+
+        <!-- Sky -->
+        <a-sky color="#ECECEC"></a-sky>
+
+    </a-scene>
+
+    <script src="main.js"></script>
+</body>
+</html>

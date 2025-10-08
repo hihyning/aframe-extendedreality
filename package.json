@@ -1,0 +1,30 @@
+{
+  "name": "aframe-extendedreality",
+  "version": "1.0.0",
+  "description": "A-Frame Extended Reality project with Vite build system",
+  "main": "index.html",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "vite preview --port 3000"
+  },
+  "keywords": [
+    "aframe",
+    "webxr",
+    "vr",
+    "ar",
+    "3d",
+    "webgl",
+    "extended-reality"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^7.1.9"
+  },
+  "dependencies": {
+    "aframe": "^1.7.0"
+  }
+}
