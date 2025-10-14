@@ -361,11 +361,11 @@ function addControlsInfo() {
     const controlsInfo = document.createElement('div');
     controlsInfo.className = 'controls-info';
     controlsInfo.innerHTML = `
-        <h3>Mystical Cloud Journey</h3>
+        <h3>Journey Through the Clouds</h3>
+        <p class="experiment-note">An experimental A-Frame experience,<br>VR Compatible</p>
         <p>WASD: Fly through 950+ clouds</p>
         <p>Mouse: Look around</p>
         <p>Click: Focus controls</p>
-        <p>Explore the endless sky!</p>
     `;
     document.body.appendChild(controlsInfo);
 }
