@@ -3,67 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A-Frame Extended Reality</title>
+    <title>Mystical Cloud Journey</title>
     <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <a-scene 
+        <a-scene 
         vr-mode-ui="enabled: true" 
         embedded 
-        style="height: 100vh; width: 100vw;">
+        style="height: 100vh; width: 100vw;"
+        background="color: #E8B4A0"
+        fog="type: exponential; color: #E8B4A0; density: 0.005">
         
         <!-- Assets -->
         <a-assets>
-            <!-- You can add your 3D models, textures, and audio files here -->
+            <!-- Gradient shader for sunset sky -->
+            <script id="gradient-shader" type="x-shader/x-fragment">
+                uniform vec3 topColor;
+                uniform vec3 bottomColor;
+                uniform float offset;
+                uniform float exponent;
+                
+                varying vec3 vWorldPosition;
+                
+                void main() {
+                    float h = normalize(vWorldPosition + offset).y;
+                    gl_FragColor = vec4(mix(bottomColor, topColor, max(pow(max(h, 0.0), exponent), 0.0)), 1.0);
+                }
+            </script>
+            
+            <script id="gradient-vertex" type="x-shader/x-vertex">
+                varying vec3 vWorldPosition;
+                
+                void main() {
+                    vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+                    vWorldPosition = worldPosition.xyz;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            </script>
         </a-assets>
 
-        <!-- Camera -->
+        <!-- Bird Camera with WASD Controls -->
         <a-camera 
-            id="camera" 
-            position="0 1.6 0" 
-            look-controls-enabled="true"
-            wasd-controls-enabled="true">
+            id="bird-camera" 
+            position="0 5 0" 
+            look-controls="enabled: true; pointerLockEnabled: true; reverseMouseDrag: false"
+            wasd-controls="enabled: true; acceleration: 80; adAxis: x; wsAxis: z; enabled: true; fly: true"
+            cursor="rayOrigin: mouse">
         </a-camera>
 
-        <!-- Lighting -->
-        <a-light type="ambient" color="#404040"></a-light>
-        <a-light type="directional" position="2 4 2" color="#ffffff" intensity="0.5"></a-light>
+        <!-- Mystical Lighting -->
+        <a-light type="ambient" color="#F5E6D3" intensity="0.4"></a-light>
+        <a-light type="directional" position="0 20 10" color="#F0E68C" intensity="0.8"></a-light>
+        <a-light type="point" position="0 10 0" color="#E8B4A0" intensity="0.6" distance="50"></a-light>
+        
+        <!-- Golden Sunlight Beams -->
+        <a-light type="directional" position="0 50 0" color="#FFD700" intensity="1.2" cast-shadow="true"></a-light>
+        <a-light type="spot" position="0 30 0" color="#FFD700" intensity="0.8" angle="30" penumbra="0.5" distance="100" cast-shadow="true"></a-light>
+        <a-light type="spot" position="10 30 0" color="#FFD700" intensity="0.6" angle="25" penumbra="0.7" distance="80" cast-shadow="true"></a-light>
+        <a-light type="spot" position="-10 30 0" color="#FFD700" intensity="0.6" angle="25" penumbra="0.7" distance="80" cast-shadow="true"></a-light>
+        <a-light type="spot" position="0 30 10" color="#FFD700" intensity="0.6" angle="25" penumbra="0.7" distance="80" cast-shadow="true"></a-light>
+        <a-light type="spot" position="0 30 -10" color="#FFD700" intensity="0.6" angle="25" penumbra="0.7" distance="80" cast-shadow="true"></a-light>
 
-        <!-- Ground -->
-        <a-plane 
-            position="0 0 0" 
-            rotation="-90 0 0" 
-            width="100" 
-            height="100" 
-            color="#7BC8A4">
-        </a-plane>
+        <!-- Cloud Container -->
+        <a-entity id="cloud-container"></a-entity>
 
-        <!-- Example objects -->
-        <a-box 
-            position="-1 0.5 -3" 
-            rotation="0 45 0" 
-            color="#4CC3D9">
-        </a-box>
-
-        <a-sphere 
-            position="0 1.25 -5" 
-            radius="1.25" 
-            color="#EF2D5E">
-        </a-sphere>
-
-        <a-cylinder 
-            position="1 0.75 -3" 
-            radius="0.5" 
-            height="1.5" 
-            color="#FFC65D">
-        </a-cylinder>
-
-        <!-- Sky -->
-        <a-sky color="#ECECEC"></a-sky>
+        <!-- Sunset Gradient Sky -->
+        <a-sky 
+            geometry="primitive: sphere; radius: 1000"
+            material="shader: gradient; topColor: #B8D4F0; bottomColor: #E8B4A0; offset: 0; exponent: 0.6"
+            vertex-shader="#gradient-vertex"
+            fragment-shader="#gradient-shader">
+        </a-sky>
 
     </a-scene>
 
     <script src="main.js"></script>
 </body>
 </html>
+

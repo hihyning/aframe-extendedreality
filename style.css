@@ -1,4 +1,4 @@
-/* A-Frame Extended Reality Styles */
+/* Mystical Cloud Journey Styles */
 
 /* Reset and base styles */
 * {
@@ -11,11 +11,12 @@ html, body {
     height: 100%;
     width: 100%;
     overflow: hidden;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Times New Roman', serif;
 }
 
 body {
-    background: #000;
+    background: linear-gradient(to bottom, #B8D4F0, #E8B4A0);
+    cursor: none;
 }
 
 /* A-Frame scene styling */
@@ -25,104 +26,57 @@ a-scene {
     height: 100vh;
 }
 
-/* VR UI styling */
-.vr-ui {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
-}
-
-/* Loading screen */
-.loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    color: white;
-    font-size: 18px;
-}
-
-.loading-screen.hidden {
-    display: none;
-}
-
-/* Controls info */
+/* Controls info - Elegant and minimal */
 .controls-info {
     position: fixed;
     bottom: 20px;
-    left: 20px;
-    color: white;
-    background: rgba(0, 0, 0, 0.7);
-    padding: 15px;
-    border-radius: 8px;
-    font-size: 14px;
+    right: 20px;
+    color: #FFFFFF;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 16px;
     z-index: 1000;
-    max-width: 300px;
+    max-width: 250px;
+    font-family: 'Times New Roman', serif;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .controls-info h3 {
-    margin-bottom: 10px;
-    color: #4CC3D9;
+    margin-bottom: 15px;
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: normal;
+    text-align: center;
+    letter-spacing: 1px;
 }
 
-.controls-info ul {
-    list-style: none;
-    padding: 0;
+.controls-info p {
+    margin-bottom: 8px;
+    color: #FFFFFF;
+    font-size: 14px;
+    line-height: 1.4;
+    opacity: 0.9;
 }
 
-.controls-info li {
-    margin-bottom: 5px;
-    padding-left: 15px;
-    position: relative;
-}
-
-.controls-info li:before {
-    content: "•";
-    color: #4CC3D9;
-    position: absolute;
-    left: 0;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-    .controls-info {
-        font-size: 12px;
-        padding: 10px;
-        max-width: 250px;
-    }
-}
-
-/* A-Frame entity custom styles */
-.custom-entity {
+/* Cloud styles */
+.cloud-formation {
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
-.custom-entity:hover {
-    transform: scale(1.1);
+.cloud-formation:hover {
+    filter: brightness(1.1);
 }
 
-/* Animation keyframes */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.cloud-particle {
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.fade-in {
-    animation: fadeIn 0.5s ease-out;
+.cloud-particle:hover {
+    filter: brightness(1.2);
 }
 
 /* VR-specific styles */
@@ -130,12 +84,61 @@ a-scene {
     cursor: none;
 }
 
+.vr-mode .controls-info {
+    display: none;
+}
+
 /* Performance optimization */
 a-scene {
     will-change: transform;
 }
 
-/* Custom cursor for desktop */
-body:not(.vr-mode) {
-    cursor: crosshair;
+/* Responsive design */
+@media (max-width: 768px) {
+    .controls-info {
+        font-size: 14px;
+        padding: 15px;
+        max-width: 200px;
+    }
 }
+
+/* Loading screen for mystical theme */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #B8D4F0, #E8B4A0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    color: #FFFFFF;
+    font-size: 18px;
+    font-family: 'Times New Roman', serif;
+}
+
+.loading-screen.hidden {
+    display: none;
+}
+
+/* Sunlight beam effects */
+.sunlight-beam {
+    animation: sunlightGlow 6s ease-in-out infinite alternate;
+}
+
+@keyframes sunlightGlow {
+    0% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0.6;
+    }
+}
+
+.sunlight-beam:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}
+
