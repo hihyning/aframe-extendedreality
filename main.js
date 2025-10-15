@@ -487,14 +487,22 @@ function registerCloudComponents() {
                 const normalizedX = deltaX / distance;
                 const normalizedY = deltaY / distance;
                 
-                // Calculate movement in 3D space
-                const moveX = normalizedX * this.moveSpeed;
-                const moveZ = -normalizedY * this.moveSpeed; // Negative Y for forward movement
+                // Get camera rotation to determine facing direction
+                const cameraRotation = this.camera.getAttribute('rotation');
+                const yaw = cameraRotation.y * Math.PI / 180; // Convert to radians
+                
+                // Calculate movement in 3D space based on camera orientation
+                const moveX = normalizedX * this.moveSpeed * Math.cos(yaw) + normalizedY * this.moveSpeed * Math.sin(yaw);
+                const moveZ = -normalizedX * this.moveSpeed * Math.sin(yaw) + normalizedY * this.moveSpeed * Math.cos(yaw);
+                
+                // Add vertical movement based on tap position relative to screen center
+                const verticalMovement = (screenCenterY - tapY) / screenCenterY; // -1 to 1 range
+                const moveY = verticalMovement * this.moveSpeed * 0.5; // Reduced vertical speed for smoother control
                 
                 // Get current position
                 const currentPos = this.camera.getAttribute('position');
                 const newX = currentPos.x + moveX;
-                const newY = currentPos.y;
+                const newY = Math.max(0.5, currentPos.y + moveY); // Prevent going below ground level
                 const newZ = currentPos.z + moveZ;
                 
                 // Animate movement
@@ -515,14 +523,22 @@ function registerCloudComponents() {
         moveInDirection: function(deltaX, deltaY) {
             this.isMoving = true;
             
-            // Calculate movement direction
-            const moveX = deltaX > 0 ? this.moveSpeed : -this.moveSpeed;
-            const moveZ = deltaY > 0 ? -this.moveSpeed : this.moveSpeed;
+            // Get camera rotation to determine facing direction
+            const cameraRotation = this.camera.getAttribute('rotation');
+            const yaw = cameraRotation.y * Math.PI / 180; // Convert to radians
+            
+            // Calculate movement direction based on camera orientation
+            const moveX = deltaX > 0 ? this.moveSpeed * Math.cos(yaw) : -this.moveSpeed * Math.cos(yaw);
+            const moveZ = deltaY > 0 ? -this.moveSpeed * Math.sin(yaw) : this.moveSpeed * Math.sin(yaw);
+            
+            // Add vertical movement for swipes (smaller than tap movement)
+            const verticalMovement = -deltaY / 100; // Scale down vertical movement for swipes
+            const moveY = verticalMovement * this.moveSpeed * 0.3;
             
             // Get current position
             const currentPos = this.camera.getAttribute('position');
             const newX = currentPos.x + moveX;
-            const newY = currentPos.y;
+            const newY = Math.max(0.5, currentPos.y + moveY); // Prevent going below ground level
             const newZ = currentPos.z + moveZ;
             
             // Animate movement
