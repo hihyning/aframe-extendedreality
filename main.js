@@ -6,7 +6,7 @@ function addLoadingScreen() {
     loadingScreen.className = 'loading-screen';
     loadingScreen.innerHTML = `
         <div>
-            <h2>Loading Mystical Cloud Journey...</h2>
+            <h2>Loading Cloud Journey...</h2>
             <p>Please wait while the 3D environment loads</p>
         </div>
     `;
@@ -362,10 +362,9 @@ function addControlsInfo() {
     controlsInfo.className = 'controls-info';
     controlsInfo.innerHTML = `
         <h3>Journey Through the Clouds</h3>
-        <p class="experiment-note">An experimental A-Frame experience,<br>VR Compatible</p>
-        <p>WASD: Fly through 950+ clouds</p>
-        <p>Mouse: Look around</p>
-        <p>Click: Focus controls</p>
+        <p class="experiment-note">An experimental A-Frame experience<br>VR Compatible, spatially aware</p>
+        <p><strong>Desktop:</strong> WASD to fly, Mouse to look</p>
+        <p><strong>Mobile:</strong> Swipe in any direction to fly</p>
     `;
     document.body.appendChild(controlsInfo);
 }
@@ -424,6 +423,70 @@ function registerCloudComponents() {
         init: function() {
             const originalY = this.el.getAttribute('position').y;
             this.el.setAttribute('animation', `property: position; to: ${this.el.getAttribute('position').x} ${originalY + 1} ${this.el.getAttribute('position').z}; dur: 3000; loop: true; dir: alternate; easing: easeInOutQuad`);
+        }
+    });
+    
+    // Mobile touch controls component
+    AFRAME.registerComponent('mobile-controls', {
+        init: function() {
+            this.camera = this.el;
+            this.isMoving = false;
+            this.moveSpeed = 2;
+            this.touchStartX = 0;
+            this.touchStartY = 0;
+            
+            // Add touch event listeners
+            document.addEventListener('touchstart', this.onTouchStart.bind(this), { passive: false });
+            document.addEventListener('touchend', this.onTouchEnd.bind(this), { passive: false });
+        },
+
+        onTouchStart: function(event) {
+            if (event.touches.length === 1) {
+                this.touchStartX = event.touches[0].clientX;
+                this.touchStartY = event.touches[0].clientY;
+            }
+        },
+
+        onTouchEnd: function(event) {
+            if (event.changedTouches.length === 1 && !this.isMoving) {
+                const touchEndX = event.changedTouches[0].clientX;
+                const touchEndY = event.changedTouches[0].clientY;
+                
+                const deltaX = touchEndX - this.touchStartX;
+                const deltaY = touchEndY - this.touchStartY;
+                
+                // Only move if touch distance is significant
+                if (Math.abs(deltaX) > 20 || Math.abs(deltaY) > 20) {
+                    this.moveInDirection(deltaX, deltaY);
+                }
+            }
+        },
+
+        moveInDirection: function(deltaX, deltaY) {
+            this.isMoving = true;
+            
+            // Calculate movement direction
+            const moveX = deltaX > 0 ? this.moveSpeed : -this.moveSpeed;
+            const moveZ = deltaY > 0 ? -this.moveSpeed : this.moveSpeed;
+            
+            // Get current position
+            const currentPos = this.camera.getAttribute('position');
+            const newX = currentPos.x + moveX;
+            const newY = currentPos.y;
+            const newZ = currentPos.z + moveZ;
+            
+            // Animate movement
+            this.camera.setAttribute('animation', {
+                property: 'position',
+                to: `${newX} ${newY} ${newZ}`,
+                dur: 500,
+                easing: 'easeOutQuad'
+            });
+            
+            // Reset movement flag after animation
+            setTimeout(() => {
+                this.isMoving = false;
+            }, 500);
         }
     });
 }

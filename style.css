@@ -47,9 +47,12 @@ a-scene {
 .controls-info h3 {
     margin-bottom: 8px;
     color: #FFFFFF;
-    font-size: 18px;
+    font-size: 1.3em;
     font-weight: normal;
     text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .controls-info .experiment-note {
@@ -149,5 +152,56 @@ a-scene {
 .sunlight-beam:hover {
     transform: scale(1.05);
     transition: transform 0.3s ease;
+}
+
+/* Mobile responsive styles */
+@media screen and (max-width: 768px) {
+    .controls-info {
+        max-width: 200px;
+        padding: 15px;
+        bottom: 15px;
+        left: 15px;
+    }
+    
+    .controls-info h3 {
+        font-size: 1em;
+        margin-bottom: 6px;
+    }
+    
+    .controls-info .experiment-note {
+        font-size: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .controls-info p {
+        font-size: 11px;
+        margin-bottom: 6px;
+        line-height: 1.3;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .controls-info {
+        max-width: 180px;
+        padding: 12px;
+        bottom: 12px;
+        left: 12px;
+    }
+    
+    .controls-info h3 {
+        font-size: 0.9em;
+        margin-bottom: 5px;
+    }
+    
+    .controls-info .experiment-note {
+        font-size: 9px;
+        margin-bottom: 8px;
+    }
+    
+    .controls-info p {
+        font-size: 10px;
+        margin-bottom: 5px;
+        line-height: 1.2;
+    }
 }
 
