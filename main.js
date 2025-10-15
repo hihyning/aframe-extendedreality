@@ -364,7 +364,7 @@ function addControlsInfo() {
         <h3>Journey Through the Clouds</h3>
         <p class="experiment-note">An experimental A-Frame experience<br>VR Compatible, spatially aware</p>
         <p><strong>Desktop:</strong> WASD to fly, Mouse to look</p>
-        <p><strong>Mobile:</strong> Swipe in any direction to fly</p>
+        <p><strong>Mobile:</strong> Tap or swipe to fly</p>
     `;
     document.body.appendChild(controlsInfo);
 }
@@ -431,9 +431,10 @@ function registerCloudComponents() {
         init: function() {
             this.camera = this.el;
             this.isMoving = false;
-            this.moveSpeed = 2;
+            this.moveSpeed = 3;
             this.touchStartX = 0;
             this.touchStartY = 0;
+            this.touchStartTime = 0;
             
             // Add touch event listeners
             document.addEventListener('touchstart', this.onTouchStart.bind(this), { passive: false });
@@ -444,6 +445,7 @@ function registerCloudComponents() {
             if (event.touches.length === 1) {
                 this.touchStartX = event.touches[0].clientX;
                 this.touchStartY = event.touches[0].clientY;
+                this.touchStartTime = Date.now();
             }
         },
 
@@ -451,14 +453,62 @@ function registerCloudComponents() {
             if (event.changedTouches.length === 1 && !this.isMoving) {
                 const touchEndX = event.changedTouches[0].clientX;
                 const touchEndY = event.changedTouches[0].clientY;
+                const touchDuration = Date.now() - this.touchStartTime;
                 
                 const deltaX = touchEndX - this.touchStartX;
                 const deltaY = touchEndY - this.touchStartY;
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
                 
-                // Only move if touch distance is significant
-                if (Math.abs(deltaX) > 20 || Math.abs(deltaY) > 20) {
+                // Check if it's a tap (short duration and small movement) or a swipe
+                if (touchDuration < 300 && distance < 30) {
+                    // It's a tap - fly in the direction of the tap relative to screen center
+                    this.tapToFly(touchEndX, touchEndY);
+                } else if (distance > 20) {
+                    // It's a swipe - use existing swipe logic
                     this.moveInDirection(deltaX, deltaY);
                 }
+            }
+        },
+
+        tapToFly: function(tapX, tapY) {
+            this.isMoving = true;
+            
+            // Get screen center
+            const screenCenterX = window.innerWidth / 2;
+            const screenCenterY = window.innerHeight / 2;
+            
+            // Calculate direction from screen center to tap point
+            const deltaX = tapX - screenCenterX;
+            const deltaY = tapY - screenCenterY;
+            
+            // Normalize direction and apply movement
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            if (distance > 0) {
+                const normalizedX = deltaX / distance;
+                const normalizedY = deltaY / distance;
+                
+                // Calculate movement in 3D space
+                const moveX = normalizedX * this.moveSpeed;
+                const moveZ = -normalizedY * this.moveSpeed; // Negative Y for forward movement
+                
+                // Get current position
+                const currentPos = this.camera.getAttribute('position');
+                const newX = currentPos.x + moveX;
+                const newY = currentPos.y;
+                const newZ = currentPos.z + moveZ;
+                
+                // Animate movement
+                this.camera.setAttribute('animation', {
+                    property: 'position',
+                    to: `${newX} ${newY} ${newZ}`,
+                    dur: 600,
+                    easing: 'easeOutQuad'
+                });
+                
+                // Reset movement flag after animation
+                setTimeout(() => {
+                    this.isMoving = false;
+                }, 600);
             }
         },
 
